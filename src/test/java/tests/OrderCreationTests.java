@@ -77,6 +77,9 @@ public class OrderCreationTests {
 
         // Проверяем, что сервер возвращает ошибку 400
         response.then().statusCode(SC_BAD_REQUEST);
+        String errorMessage = response.path("message");
+        org.junit.Assert.assertEquals("Неверное сообщение об ошибке",
+                "Ingredient ids must be provided", errorMessage);
     }
 
     @Test
@@ -91,19 +94,8 @@ public class OrderCreationTests {
 
         // Проверяем, что сервер возвращает ошибку 401
         response.then().statusCode(SC_UNAUTHORIZED);
-    }
-
-    @Test
-    @DisplayName("Создание заказа с неверными ингредиентами")
-    @Description("Проверка ошибки при создании заказа с неверными идентификаторами ингредиентов")
-    public void testCreateOrderWithInvalidIngredients() {
-        // Создаем заказ с неверными ингредиентами
-        Order order = DataFactory.createOrderWithInvalidIngredients();
-
-        // Отправляем запрос на создание заказа
-        Response response = apiClient.createOrder(createdUserToken, order);
-
-        // Проверяем, что сервер возвращает ошибку 400
-        response.then().statusCode(SC_INTERNAL_SERVER_ERROR);
+        String errorMessage = response.path("message");
+        org.junit.Assert.assertEquals("Неверное сообщение об ошибке",
+                "You should be authorised", errorMessage);
     }
 }

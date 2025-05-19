@@ -52,10 +52,30 @@ public class UserCreationTests {
     }
 
     @Test
-    @DisplayName("Создание пользователя без обязательного поля")
-    @Description("Проверка ошибки при попытке создать пользователя без обязательного поля")
-    public void testCreateUserMissingField() {
-        User user = DataFactory.createUserWithMissingField();
+    @DisplayName("Создание пользователя без email")
+    @Description("Проверка ошибки при попытке создать пользователя без email")
+    public void testCreateUserWithoutEmail() {
+        User user = new User(null, "password123", "TestUser");
+        Response response = apiClient.createUser(user);
+        response.then().statusCode(SC_FORBIDDEN)
+                .body("message", equalTo("Email, password and name are required fields"));
+    }
+
+    @Test
+    @DisplayName("Создание пользователя без пароля")
+    @Description("Проверка ошибки при попытке создать пользователя без пароля")
+    public void testCreateUserWithoutPassword() {
+        User user = new User("test@example.com", null, "TestUser");
+        Response response = apiClient.createUser(user);
+        response.then().statusCode(SC_FORBIDDEN)
+                .body("message", equalTo("Email, password and name are required fields"));
+    }
+
+    @Test
+    @DisplayName("Создание пользователя без имени")
+    @Description("Проверка ошибки при попытке создать пользователя без имени")
+    public void testCreateUserWithoutName() {
+        User user = new User("test@example.com", "password123", null);
         Response response = apiClient.createUser(user);
         response.then().statusCode(SC_FORBIDDEN)
                 .body("message", equalTo("Email, password and name are required fields"));

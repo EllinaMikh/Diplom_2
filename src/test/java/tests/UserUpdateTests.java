@@ -33,13 +33,32 @@ public class UserUpdateTests {
     }
 
     @Test
-    @DisplayName("Изменение данных пользователя с авторизацией")
-    @Description("Проверка возможности изменения данных пользователя с авторизацией")
-    public void testUpdateUserWithAuthorization() {
-        User updatedUser = new User("updated.email@example.com", "newPassword123", "UpdatedUser");
+    @DisplayName("Изменение email пользователя с авторизацией")
+    @Description("Проверка возможности изменения email пользователя с авторизацией")
+    public void testUpdateUserEmailWithAuthorization() {
+        User updatedUser = new User("updated.email@example.com", null, null);
         Response response = apiClient.updateUser(createdUserToken, updatedUser);
         response.then().statusCode(SC_OK)
-                .body("user.email", equalTo(updatedUser.getEmail()))
+                .body("user.email", equalTo(updatedUser.getEmail()));
+    }
+
+    @Test
+    @DisplayName("Изменение пароля пользователя с авторизацией")
+    @Description("Проверка возможности изменения пароля пользователя с авторизацией")
+    public void testUpdateUserPasswordWithAuthorization() {
+        User updatedUser = new User(null, "newPassword123", null);
+        Response response = apiClient.updateUser(createdUserToken, updatedUser);
+        response.then().statusCode(SC_OK);
+        // Пароль обычно не возвращается в ответе, проверяем только успешный статус
+    }
+
+    @Test
+    @DisplayName("Изменение имени пользователя с авторизацией")
+    @Description("Проверка возможности изменения имени пользователя с авторизацией")
+    public void testUpdateUserNameWithAuthorization() {
+        User updatedUser = new User(null, null, "UpdatedUser");
+        Response response = apiClient.updateUser(createdUserToken, updatedUser);
+        response.then().statusCode(SC_OK)
                 .body("user.name", equalTo(updatedUser.getName()));
     }
 

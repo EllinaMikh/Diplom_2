@@ -49,4 +49,12 @@ public class UserLoginTests {
         Response loginResponse = apiClient.loginUser(createdUser.getEmail(), "wrongPassword"); // Используем неверный пароль
         loginResponse.then().statusCode(SC_UNAUTHORIZED); // Ожидаем ошибку 401
     }
+
+    @Test
+    @DisplayName("Логин с неверным логином")
+    @Description("Проверка, что нельзя войти в систему с неверным логином (email)")
+    public void testLoginWithInvalidEmail() {
+        Response loginResponse = apiClient.loginUser("wrongemail@example.com", createdUser.getPassword());
+        loginResponse.then().statusCode(SC_UNAUTHORIZED);
+    }
 }

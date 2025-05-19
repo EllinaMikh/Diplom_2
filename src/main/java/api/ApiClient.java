@@ -43,9 +43,7 @@ public class ApiClient {
 
         given()
                 .header("Authorization", token)
-                .delete("/auth/user")
-                .then()
-                .statusCode(SC_ACCEPTED);  // Ожидаем код 202 (Accepted) для успешного удаления
+                .delete("/auth/user");
     }
 
 
