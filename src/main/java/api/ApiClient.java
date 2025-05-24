@@ -7,7 +7,6 @@ import io.restassured.response.Response;
 import models.Order;
 import models.User;
 import models.UserLogin;
-import utils.JsonUtils;
 
 import static org.apache.http.HttpStatus.*;
 
@@ -23,7 +22,7 @@ public class ApiClient {
     public Response createUser(User user) {
         return given()
                 .contentType("application/json")
-                .body(JsonUtils.toJson(user))
+                .body(user)
                 .post("/auth/register");
     }
 
@@ -31,7 +30,7 @@ public class ApiClient {
     public Response loginUser(String email, String password) {
         return given()
                 .contentType("application/json")
-                .body(JsonUtils.toJson(new UserLogin(email, password)))
+                .body(new UserLogin(email, password))
                 .post("/auth/login");
     }
 
@@ -51,7 +50,7 @@ public class ApiClient {
     public Response createOrder(String token, Order order) {
         var request = given()
                 .contentType("application/json")
-                .body(JsonUtils.toJson(order));
+                .body(order);
 
         // Добавляем заголовок Authorization только если токен не равен null
         if (token != null) {
@@ -77,7 +76,7 @@ public class ApiClient {
     public Response updateUser(String token, User updatedUser) {
         var request = given()
                 .contentType("application/json")
-                .body(JsonUtils.toJson(updatedUser));
+                .body(updatedUser);
 
         // Добавляем заголовок Authorization только если токен не равен null
         if (token != null) {

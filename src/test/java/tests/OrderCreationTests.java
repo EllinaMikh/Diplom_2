@@ -98,4 +98,22 @@ public class OrderCreationTests {
         org.junit.Assert.assertEquals("Неверное сообщение об ошибке",
                 "You should be authorised", errorMessage);
     }
+
+    @Test
+    @DisplayName("Создание заказа с неверными ингредиентами")
+    @Description("Проверка ошибки при создании заказа с неверными идентификаторами ингредиентов")
+    public void testCreateOrderWithInvalidIngredients() {
+        // Создаем заказ с неверными ингредиентами
+        Order order = DataFactory.createOrderWithInvalidIngredients();
+
+        // Отправляем запрос
+        Response response = apiClient.createOrder(createdUserToken, order);
+
+        response.then().statusCode(SC_INTERNAL_SERVER_ERROR); // 500
+
+        String errorMessage = response.getBody().asString();
+        org.junit.Assert.assertTrue("Ожидалось сообщение 'Internal Server Error'",
+                errorMessage.contains("Internal Server Error"));
+    }
+
 }
